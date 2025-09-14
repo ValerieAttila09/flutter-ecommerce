@@ -1,122 +1,322 @@
+
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const EcommerceApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class EcommerceApp extends StatelessWidget {
+  const EcommerceApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'E-Commerce App',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        brightness: Brightness.light,
+        primaryColor: Colors.white,
+        scaffoldBackgroundColor: Colors.grey[100],
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          iconTheme: IconThemeData(color: Colors.grey[800]),
+          titleTextStyle: GoogleFonts.lato(
+            color: Colors.grey[800],
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        textTheme: GoogleFonts.latoTextTheme(
+          Theme.of(context).textTheme.apply(
+                bodyColor: Colors.grey[800],
+                displayColor: Colors.grey[800],
+              ),
+        ),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const EcommerceHomeScreen(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class EcommerceHomeScreen extends StatefulWidget {
+  const EcommerceHomeScreen({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<EcommerceHomeScreen> createState() => _EcommerceHomeScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _EcommerceHomeScreenState extends State<EcommerceHomeScreen> {
+  int _selectedIndex = 0;
 
-  void _incrementCounter() {
+  void _onItemTapped(int index) {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      _selectedIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: const Text('Discover'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.notifications_none),
+            onPressed: () {},
+          ),
+        ],
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+      body: SingleChildScrollView(
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: 'Search for products...',
+                  prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                'Categories',
+                style: GoogleFonts.lato(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 100,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                children: const [
+                  CategoryCard(title: 'Apparel', icon: Icons.shopping_bag),
+                  CategoryCard(title: 'Electronics', icon: Icons.devices),
+                  CategoryCard(title: 'Furniture', icon: Icons.chair),
+                  CategoryCard(title: 'Gadgets', icon: Icons.phone_iphone),
+                  CategoryCard(title: 'More', icon: Icons.more_horiz),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                'Popular Products',
+                style: GoogleFonts.lato(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            GridView.count(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              crossAxisCount: 2,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              padding: const EdgeInsets.all(16.0),
+              children: const [
+                ProductCard(
+                  imageUrl: 'https://picsum.photos/id/10/200/200',
+                  name: 'Modern Lamp',
+                  price: 'Rp 750.000',
+                ),
+                ProductCard(
+                  imageUrl: 'https://picsum.photos/id/20/200/200',
+                  name: 'Stylish Chair',
+                  price: 'Rp 2.500.000',
+                ),
+                ProductCard(
+                  imageUrl: 'https://picsum.photos/id/30/200/200',
+                  name: 'Minimalist Watch',
+                  price: 'Rp 1.800.000',
+                ),
+                ProductCard(
+                  imageUrl: 'https://picsum.photos/id/40/200/200',
+                  name: 'Wireless Headphones',
+                  price: 'Rp 1.200.000',
+                ),
+                 ProductCard(
+                  imageUrl: 'https://picsum.photos/id/50/200/200',
+                  name: 'Modern Lamp',
+                  price: 'Rp 750.000',
+                ),
+                ProductCard(
+                  imageUrl: 'https://picsum.photos/id/60/200/200',
+                  name: 'Stylish Chair',
+                  price: 'Rp 2.500.000',
+                ),
+                ProductCard(
+                  imageUrl: 'https://picsum.photos/id/70/200/200',
+                  name: 'Minimalist Watch',
+                  price: 'Rp 1.800.000',
+                ),
+                ProductCard(
+                  imageUrl: 'https://picsum.photos/id/80/200/200',
+                  name: 'Wireless Headphones',
+                  price: 'Rp 1.200.000',
+                ),
+              ],
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        selectedItemColor: Colors.blueAccent,
+        unselectedItemColor: Colors.grey,
+        showUnselectedLabels: true,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.category),
+            label: 'Categories',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: 'Cart',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CategoryCard extends StatelessWidget {
+  final String title;
+  final IconData icon;
+
+  const CategoryCard({
+    super.key,
+    required this.title,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 80,
+      margin: const EdgeInsets.only(right: 12.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withAlpha(25),
+                  spreadRadius: 1,
+                  blurRadius: 5,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Icon(icon, color: Colors.blueAccent),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            title,
+            style: GoogleFonts.lato(fontSize: 12),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ProductCard extends StatelessWidget {
+  final String imageUrl;
+  final String name;
+  final String price;
+
+  const ProductCard({
+    super.key,
+    required this.imageUrl,
+    required this.name,
+    required this.price,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.0),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12.0),
+                topRight: Radius.circular(12.0),
+              ),
+              child: Image.network(
+                imageUrl,
+                fit: BoxFit.cover,
+                 errorBuilder: (context, error, stackTrace) {
+                  return const Icon(Icons.error, color: Colors.red, size: 50);
+                },
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  style: GoogleFonts.lato(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  price,
+                  style: GoogleFonts.lato(
+                    fontSize: 14,
+                    color: Colors.blueAccent,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
