@@ -28,6 +28,13 @@ Tujuan dari proyek ini adalah untuk membuat antarmuka pengguna (UI) aplikasi e-c
             *   **Categories:** Untuk menelusuri kategori produk.
             *   **Cart:** Keranjang belanja.
             *   **Profile:** Halaman profil pengguna.
+    *   **Sidebar (Drawer):**
+        *   Header yang menampilkan informasi pengguna (nama dan email).
+        *   Opsi navigasi untuk:
+            *   Akun Saya (My Account)
+            *   Pesanan Saya (My Orders)
+            *   Pengaturan (Settings)
+            *   Keluar (Logout)
 
 ## Rencana Saat Ini
 
@@ -40,6 +47,10 @@ Tujuan dari proyek ini adalah untuk membuat antarmuka pengguna (UI) aplikasi e-c
     *   Buat `EcommerceHomeScreen` sebagai widget utama.
     *   Rancang tata letak `Scaffold` dengan `AppBar`, `BottomNavigationBar`, dan `body` yang terstruktur.
     *   Implementasikan tampilan petak produk (product grid) dengan data placeholder.
-3.  **Verifikasi & Selesai:**
+3.  **Tambahkan Sidebar:**
+    *   Tambahkan `Drawer` ke `Scaffold` di `EcommerceHomeScreen`.
+    *   Gunakan `UserAccountsDrawerHeader` untuk header yang menarik secara visual.
+    *   Isi `Drawer` dengan `ListTile` untuk item navigasi.
+4.  **Verifikasi & Selesai:**
     *   Pastikan aplikasi berjalan tanpa eror dan tata letak ditampilkan dengan benar.
     *   Sampaikan hasil akhir kepada pengguna.

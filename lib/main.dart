@@ -71,6 +71,56 @@ class _EcommerceHomeScreenState extends State<EcommerceHomeScreen> {
           ),
         ],
       ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            UserAccountsDrawerHeader(
+              accountName: const Text("John Doe"),
+              accountEmail: const Text("john.doe@example.com"),
+              currentAccountPicture: CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Text(
+                  "JD",
+                  style: TextStyle(fontSize: 40.0, color: Colors.grey[800]),
+                ),
+              ),
+              decoration: BoxDecoration(
+                color: Colors.blueAccent,
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.account_circle),
+              title: const Text('My Account'),
+              onTap: () {
+                // Navigate to My Account page
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.list_alt),
+              title: const Text('My Orders'),
+              onTap: () {
+                // Navigate to My Orders page
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('Settings'),
+              onTap: () {
+                // Navigate to Settings page
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Logout'),
+              onTap: () {
+                // Handle logout
+              },
+            ),
+          ],
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
