@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -29,9 +28,9 @@ class EcommerceApp extends StatelessWidget {
         ),
         textTheme: GoogleFonts.latoTextTheme(
           Theme.of(context).textTheme.apply(
-                bodyColor: Colors.grey[800],
-                displayColor: Colors.grey[800],
-              ),
+            bodyColor: Colors.grey[800],
+            displayColor: Colors.grey[800],
+          ),
         ),
       ),
       home: const EcommerceHomeScreen(),
@@ -61,10 +60,7 @@ class _EcommerceHomeScreenState extends State<EcommerceHomeScreen> {
       appBar: AppBar(
         title: const Text('Discover'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {},
-          ),
+          IconButton(icon: const Icon(Icons.search), onPressed: () {}),
           IconButton(
             icon: const Icon(Icons.notifications_none),
             onPressed: () {},
@@ -85,9 +81,7 @@ class _EcommerceHomeScreenState extends State<EcommerceHomeScreen> {
                   style: TextStyle(fontSize: 40.0, color: Colors.grey[800]),
                 ),
               ),
-              decoration: BoxDecoration(
-                color: Colors.blueAccent,
-              ),
+              decoration: BoxDecoration(color: Colors.blueAccent),
             ),
             ListTile(
               leading: const Icon(Icons.account_circle),
@@ -203,7 +197,7 @@ class _EcommerceHomeScreenState extends State<EcommerceHomeScreen> {
                   name: 'Wireless Headphones',
                   price: 'Rp 1.200.000',
                 ),
-                 ProductCard(
+                ProductCard(
                   imageUrl: 'https://picsum.photos/id/50/200/200',
                   name: 'Modern Lamp',
                   price: 'Rp 750.000',
@@ -235,10 +229,7 @@ class _EcommerceHomeScreenState extends State<EcommerceHomeScreen> {
         unselectedItemColor: Colors.grey,
         showUnselectedLabels: true,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(
             icon: Icon(Icons.category),
             label: 'Categories',
@@ -247,10 +238,7 @@ class _EcommerceHomeScreenState extends State<EcommerceHomeScreen> {
             icon: Icon(Icons.shopping_cart),
             label: 'Cart',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
     );
@@ -261,11 +249,7 @@ class CategoryCard extends StatelessWidget {
   final String title;
   final IconData icon;
 
-  const CategoryCard({
-    super.key,
-    required this.title,
-    required this.icon,
-  });
+  const CategoryCard({super.key, required this.title, required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -275,22 +259,25 @@ class CategoryCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withAlpha(25),
-                  spreadRadius: 1,
-                  blurRadius: 5,
-                  offset: const Offset(0, 3),
-                ),
-              ],
+          ElevatedButton(
+            onPressed: () => _showCustomDialog(context),
+            child: Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withAlpha(25),
+                    spreadRadius: 1,
+                    blurRadius: 5,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Icon(icon, color: Colors.blueAccent),
             ),
-            child: Icon(icon, color: Colors.blueAccent),
           ),
           const SizedBox(height: 8),
           Text(
@@ -320,9 +307,7 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.0),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -335,7 +320,7 @@ class ProductCard extends StatelessWidget {
               child: Image.network(
                 imageUrl,
                 fit: BoxFit.cover,
-                 errorBuilder: (context, error, stackTrace) {
+                errorBuilder: (context, error, stackTrace) {
                   return const Icon(Icons.error, color: Colors.red, size: 50);
                 },
               ),
@@ -369,4 +354,41 @@ class ProductCard extends StatelessWidget {
       ),
     );
   }
+}
+
+void _showCustomDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        child: Container(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Custom Dialog Title',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'This is a custom dialog with a message.',
+                style: TextStyle(fontSize: 16),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Close', style: TextStyle(fontSize: 16)),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 }
