@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myapp/screens/categories_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -74,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
-    Center(child: Text('Categories Page')),
+    CategoriesScreen(),
     Center(child: Text('Cart Page')),
     Center(child: Text('Profile Page')),
   ];
