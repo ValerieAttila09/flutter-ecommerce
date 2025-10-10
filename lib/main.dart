@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:myapp/providers/cart_provider.dart';
+import 'package:myapp/screens/cart_screen.dart';
 import 'package:myapp/screens/categories_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:myapp/models/product.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,54 +15,57 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'E-Commerce App',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blue,
-          brightness: Brightness.light,
-          primary: Colors.blue,
-          onPrimary: Colors.white,
-          background: Colors.grey[100],
-          surface: Colors.white,
-        ),
-        useMaterial3: true,
-        textTheme: GoogleFonts.latoTextTheme(
-          Theme.of(context).textTheme,
-        ).copyWith(
-          displayLarge: const TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
+    return ChangeNotifierProvider(
+      create: (context) => CartProvider(),
+      child: MaterialApp(
+        title: 'E-Commerce App',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.blue,
+            brightness: Brightness.light,
+            primary: Colors.blue,
+            onPrimary: Colors.white,
+            background: Colors.grey[100],
+            surface: Colors.white,
           ),
-          titleLarge: const TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
+          useMaterial3: true,
+          textTheme: GoogleFonts.latoTextTheme(
+            Theme.of(context).textTheme,
+          ).copyWith(
+            displayLarge: const TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+            titleLarge: const TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+            bodyMedium: const TextStyle(
+              fontSize: 16,
+              color: Colors.black54,
+            ),
           ),
-          bodyMedium: const TextStyle(
-            fontSize: 16,
-            color: Colors.black54,
+          appBarTheme: AppBarTheme(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            iconTheme: const IconThemeData(color: Colors.black54),
+            titleTextStyle: GoogleFonts.lato(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
+          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+            selectedItemColor: Colors.blue,
+            unselectedItemColor: Colors.grey,
+            showUnselectedLabels: true,
           ),
         ),
-        appBarTheme: AppBarTheme(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          iconTheme: const IconThemeData(color: Colors.black54),
-          titleTextStyle: GoogleFonts.lato(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
-          ),
-        ),
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          selectedItemColor: Colors.blue,
-          unselectedItemColor: Colors.grey,
-          showUnselectedLabels: true,
-        ),
+        home: const HomeScreen(),
+        debugShowCheckedModeBanner: false,
       ),
-      home: const HomeScreen(),
-      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -76,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     CategoriesScreen(),
-    Center(child: Text('Cart Page')),
+    CartScreen(),
     Center(child: Text('Profile Page')),
   ];
 
@@ -213,6 +220,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cart = Provider.of<CartProvider>(context, listen: false);
     return ListView(
       children: [
         const Padding(
@@ -234,7 +242,10 @@ class HomePage extends StatelessWidget {
           ),
         ),
         ProductGrid(
-          onProductTap: () => _showCustomDialog(context),
+          onProductTap: (product) {
+            cart.addItem(product);
+            _showCustomDialog(context, product);
+          },
         ),
       ],
     );
@@ -307,18 +318,19 @@ class CategoryList extends StatelessWidget {
 }
 
 class ProductGrid extends StatelessWidget {
-  final VoidCallback onProductTap;
+  final Function(Product) onProductTap;
   const ProductGrid({super.key, required this.onProductTap});
 
   @override
   Widget build(BuildContext context) {
     final products = List.generate(
       10,
-      (index) => {
-        'name': 'Product ${index + 1}',
-        'price': '\$${(index + 1) * 25}',
-        'image': 'https://picsum.photos/seed/${index + 1}/300/300',
-      },
+      (index) => Product(
+        id: 'p${index + 1}',
+        name: 'Product ${index + 1}',
+        price: (index + 1) * 25.0,
+        imageUrl: 'https://picsum.photos/seed/${index + 1}/300/300',
+      ),
     );
 
     return GridView.builder(
@@ -334,7 +346,7 @@ class ProductGrid extends StatelessWidget {
       itemCount: products.length,
       itemBuilder: (context, index) {
         return GestureDetector(
-          onTap: onProductTap,
+          onTap: () => onProductTap(products[index]),
           child: Card(
             elevation: 2,
             shape: RoundedRectangleBorder(
@@ -348,7 +360,7 @@ class ProductGrid extends StatelessWidget {
                     borderRadius:
                         const BorderRadius.vertical(top: Radius.circular(12)),
                     child: Image.network(
-                      products[index]['image']!,
+                      products[index].imageUrl,
                       fit: BoxFit.cover,
                       width: double.infinity,
                     ),
@@ -357,7 +369,7 @@ class ProductGrid extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    products[index]['name']!,
+                    products[index].name,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
@@ -367,7 +379,7 @@ class ProductGrid extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Text(
-                    products[index]['price']!,
+                    '\$${products[index].price.toStringAsFixed(2)}',
                     style: TextStyle(
                       fontSize: 16,
                       color: Theme.of(context).colorScheme.primary,
@@ -385,7 +397,7 @@ class ProductGrid extends StatelessWidget {
   }
 }
 
-void _showCustomDialog(BuildContext context) {
+void _showCustomDialog(BuildContext context, Product product) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -409,10 +421,10 @@ void _showCustomDialog(BuildContext context) {
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
-              const Text(
-                'Your item has been successfully added to your shopping cart.',
+              Text(
+                '${product.name} has been added to your cart.',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 24),
               ElevatedButton(
@@ -444,7 +456,9 @@ void _showCustomDialog(BuildContext context) {
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();
-                  // You can add navigation to the cart page here
+                  // Navigate to cart screen
+                  // This is handled by the bottom navigation bar, but you could also do it programmatically
+                  // For example, by calling a method passed to home page to switch tabs
                 },
               ),
             ],
