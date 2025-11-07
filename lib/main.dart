@@ -5,6 +5,7 @@ import 'package:myapp/screens/cart_screen.dart';
 import 'package:myapp/screens/categories_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/models/product.dart';
+import 'package:myapp/screens/profile_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -84,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
     HomePage(),
     CategoriesScreen(),
     CartScreen(),
-    Center(child: Text('Profile Page')),
+    ProfileScreen(),
   ];
 
   void _onItemTapped(int index) {
